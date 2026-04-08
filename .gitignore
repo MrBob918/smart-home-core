@@ -1,0 +1,70 @@
+# C++ artifacts
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+*.zip
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+build/
+out/
+
+# VSCode
+.vscode/
+*.code-workspace
+.history/
+
+# Vosk API
+vosk-model-*/
+*.vosk
+vosk-api/
+models/**
+/models/
+/vosk-include/**
+/vosk-include
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+*.log
+
+# Build directories
+bin/
+lib/
+dist/
+Debug/
+Release/
+RelWithDebInfo/
+MinSizeRel/
+
+# IDE and editors
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Dependencies
+third_party/
+external/
+vendor/
+
+# Testing
+Testing/
+*.gcda
+*.gcno
+*.gcov
