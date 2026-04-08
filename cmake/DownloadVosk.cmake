@@ -11,7 +11,10 @@ else()
 endif()
 
 file(ARCHIVE_EXTRACT INPUT ${CMAKE_SOURCE_DIR}/core/include/vosk-linux-aarch64-0.3.45.zip DESTINATION ${CMAKE_SOURCE_DIR}/core/include/)
-file(RENAME ${CMAKE_SOURCE_DIR}/core/include/vosk-linux-aarch64-0.3.45 ${CMAKE_SOURCE_DIR}/core/include/vosk-include)
+
+file(COPY ${CMAKE_SOURCE_DIR}/core/include/vosk-linux-aarch64-0.3.45/ DESTINATION ${CMAKE_SOURCE_DIR}/core/include/vosk-include/)
+file(REMOVE_RECURSE ${CMAKE_SOURCE_DIR}/core/include/vosk-linux-aarch64-0.3.45)
+
 file(REMOVE ${CMAKE_SOURCE_DIR}/core/include/vosk-linux-aarch64-0.3.45.zip)
 
 endif()
