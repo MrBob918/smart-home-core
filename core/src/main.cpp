@@ -42,7 +42,7 @@ int main() {
     }
     
     const char *result = vosk_recognizer_final_result(vskRec);
-    std::cout << result << std::endl;
+    std::cout << "result: "<< result << std::endl;
 
     vosk_recognizer_free(vskRec);
     
