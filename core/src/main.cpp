@@ -10,7 +10,7 @@ int main() {
         return -1;
     }
 
-    VoskRecognizer *vskRec = vosk_recognizer_new(vskModel, 16000);
+    VoskRecognizer *vskRec = vosk_recognizer_new(vskModel, 44100);
     if (vskRec == NULL) {
         std::cerr << "Failed to create recognizer\n";
         vosk_model_free(vskModel);
