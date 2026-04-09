@@ -4,7 +4,7 @@
 
 int main() {
     
-    VoskModel *vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");
+    VoskModel *vskModel = vosk_model_new("./models/vosk-model-small-ru-0.22");
     if (vskModel == NULL) {
         std::cerr << "Failed to create model\n";
         return -1;
