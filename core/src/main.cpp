@@ -17,7 +17,6 @@ int main() {
         return -1;
     }
     
-    vosk_recognizer_set_words(vskRec, 1);
 
     std::ifstream wavFile("./Voice_test.wav", std::ios::binary);
     
@@ -28,7 +27,7 @@ int main() {
         return -1;
     }
 
-    wavFile.seekg(44, std::ios::beg);
+//    wavFile.seekg(44, std::ios::beg);
 
     const size_t BUFFER_SIZE = 1024;
     char BUFFER[BUFFER_SIZE];
@@ -42,8 +41,6 @@ int main() {
 
     }
     
-    wavFile.close();
-    
     const char *result = vosk_recognizer_final_result(vskRec);
     std::cout << result << std::endl;
 
@@ -51,4 +48,5 @@ int main() {
     
     vosk_model_free(vskModel);
 
+    wavFile.close();
 } 
