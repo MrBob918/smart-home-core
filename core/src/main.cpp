@@ -1,6 +1,8 @@
 #include "vosk_api.h"
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <sstream>
 
 int main() {
     
@@ -31,18 +33,22 @@ int main() {
 
     const size_t BUFFER_SIZE = 1024;
     char BUFFER[BUFFER_SIZE];
-
+    
+    std::stringstream streamRec;
+    std::string resultText;
     while (wavFile.read(BUFFER, BUFFER_SIZE) || wavFile.gcount() > 0) {
         std::streamsize bytesRead = wavFile.gcount();
         
         if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) == 1) {
-            std::cout << vosk_recognizer_result(vskRec) << std::endl;
+            streamRec << vosk_recognizer_result(vskRec) << '.';
+        }else if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) == 0){
+            streamRec << ' ';
         }
 
     }
     
-    const char *result = vosk_recognizer_final_result(vskRec);
-    std::cout << "result: "<< result << std::endl;
+    resultText = streamRec.str();
+    std::cout << "result: "<< resultText << std::endl;
 
     vosk_recognizer_free(vskRec);
     
