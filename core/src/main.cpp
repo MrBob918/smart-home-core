@@ -30,7 +30,7 @@ int main() {
 
     wavFile.seekg(44, std::ios::beg);
 
-    const size_t BUFFER_SIZE = 4000;
+    const size_t BUFFER_SIZE = 1024;
     char BUFFER[BUFFER_SIZE];
 
     while (wavFile.read(BUFFER, BUFFER_SIZE) || wavFile.gcount() > 0) {
