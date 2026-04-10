@@ -1,4 +1,4 @@
-if(NOT EXIST ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22/)
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22/)
 file(DOWNLOAD https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip ${CMAKE_BINARY_DIR}/models/ STATUS DownloadVoskModelStatus SHOW_PROGRESS)
 
 list(get DownloadVoskModelStatus 0 DownloadVoskModelStatus_code)
