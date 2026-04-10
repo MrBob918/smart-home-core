@@ -4,11 +4,11 @@
 stt::stt(const char *modelPath, float simpleRate) {}
 
 void stt::voskInit(){
-    vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");
+    VoskModel *vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");
     if(vskModel == nullptr) {
         errorCheck(errorType::modelLoadFailed);
     }
-    vskRec = vosk_recognizer_new(vskModel, 44100);
+    VoskRecognizer *vskRec = vosk_recognizer_new(vskModel, 44100);
     if(vskRec == nullptr) {
         errorCheck(errorType::recognizerLoadFailed);
     }
