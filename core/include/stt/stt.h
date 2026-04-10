@@ -1,6 +1,7 @@
 #ifndef STT_H
 #define STT_H
 #include "vosk_api.h"
+#include <string>
 
 class stt{
     public:

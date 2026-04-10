@@ -1,6 +1,5 @@
 #include "stt.h"
 #include <fstream>
-#include <string>
 #include <iostream>
 stt::stt(const char *modelPath, float simpleRate = 44100) {
 
