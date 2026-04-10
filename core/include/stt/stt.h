@@ -1,12 +1,10 @@
 #ifndef STT_H
 #define STT_H
-#include <optional>
-#include <string>
 #include "vosk_api.h"
 
 class stt{
     public:
-    stt(const char *modelPath, float simpleRate);
+    stt(const char *modelPath, float simpleRate = 16000);
     
     ~stt();
     
