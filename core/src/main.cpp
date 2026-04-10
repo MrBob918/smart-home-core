@@ -34,20 +34,17 @@ int main() {
     const size_t BUFFER_SIZE = 1024;
     char BUFFER[BUFFER_SIZE];
     
-    std::stringstream streamRec;
+    // std::stringstream streamRec;
     std::string resultText;
     while (wavFile.read(BUFFER, BUFFER_SIZE) || wavFile.gcount() > 0) {
         std::streamsize bytesRead = wavFile.gcount();
         
         if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) == 1) {
-            streamRec << vosk_recognizer_result(vskRec) << '.';
-        }else if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) != -1) {
-            continue;
+            std::cout << '.' << std::endl;
         }
 
     }
-    
-    resultText = streamRec.str();
+    resultText = vosk_recognizer_final_result(vskRec);
     std::cout << "result: "<< resultText << std::endl;
 
     vosk_recognizer_free(vskRec);
