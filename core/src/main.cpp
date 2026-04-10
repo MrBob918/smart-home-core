@@ -41,8 +41,8 @@ int main() {
         
         if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) == 1) {
             streamRec << vosk_recognizer_result(vskRec) << '.';
-        }else if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) == 0){
-            streamRec << ' ';
+        }else if (vosk_recognizer_accept_waveform(vskRec, BUFFER, bytesRead) != -1) {
+            continue;
         }
 
     }
