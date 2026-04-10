@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #create list cmake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(DownloadVosk) #call Download vosk module
+include(DownloadVoskModel)
 
 # Vosk library path
 set(VOSK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/vosk-include)
