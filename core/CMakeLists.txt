@@ -7,15 +7,20 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 #create list cmake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 include(DownloadVosk) #call Download vosk module
 include(DownloadVoskModel)
 
 # Vosk library path
 set(VOSK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/vosk-include)
 
+# stt library path
+set(STT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/stt)
+
 # Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 include_directories(${VOSK_DIR})
+include_directories(${STT_DIR})
 
 # Source files
 file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
