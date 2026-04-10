@@ -1,10 +1,7 @@
 #include "stt.h"
 #include <fstream>
 #include <iostream>
-stt::stt(const char *modelPath, float simpleRate = 44100) {
-
-    errorText = "Errors not found!"; 
-}
+stt::stt(const char *modelPath, float simpleRate) {}
 
 void stt::voskInit(){
     vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");

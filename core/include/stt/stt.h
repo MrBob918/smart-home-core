@@ -24,8 +24,6 @@ class stt{
     VoskRecognizer *vskRec;
 
     std::string rawText;
-
-    std::string errorText;
     
     enum errorType{
         modelLoadFailed,
