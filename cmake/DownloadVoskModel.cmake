@@ -11,6 +11,6 @@ else()
     message(FATAL_ERROR "Error: ${DownloadVoskModelStatus_message}")
 endif()
 
-file(ARCHIVE_EXTRACT INPUT ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22.zip DESTINATION ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22)
+file(ARCHIVE_EXTRACT INPUT ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22.zip DESTINATION ${CMAKE_BINARY_DIR}/bin/models/)
 file(REMOVE ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22.zip)
 endif()
