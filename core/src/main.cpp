@@ -31,7 +31,7 @@ int main() {
 
     wavFile.seekg(44, std::ios::beg);
 
-    const size_t BUFFER_SIZE = 1024;
+    const size_t BUFFER_SIZE = 4000;
     char BUFFER[BUFFER_SIZE];
     
     // std::stringstream streamRec;
