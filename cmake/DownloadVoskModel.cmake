@@ -1,6 +1,6 @@
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22/)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/models/)
-file(DOWNLOAD https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22.zip STATUS DownloadVoskModelStatus SHOW_PROGRESS)
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22/)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/models/)
+file(DOWNLOAD https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22.zip STATUS DownloadVoskModelStatus SHOW_PROGRESS)
 
 list(GET DownloadVoskModelStatus 0 DownloadVoskModelStatus_code)
 list(GET DownloadVoskModelStatus 1 DownloadVoskModelStatus_message)
@@ -11,6 +11,6 @@ else()
     message(FATAL_ERROR "Error: ${DownloadVoskModelStatus_message}")
 endif()
 
-file(ARCHIVE_EXTRACT INPUT ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22.zip DESTINATION ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22)
-file(REMOVE ${CMAKE_BINARY_DIR}/models/vosk-model-small-ru-0.22.zip)
+file(ARCHIVE_EXTRACT INPUT ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22.zip DESTINATION ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22)
+file(REMOVE ${CMAKE_BINARY_DIR}/bin/models/vosk-model-small-ru-0.22.zip)
 endif()

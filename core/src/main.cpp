@@ -6,7 +6,7 @@
 
 int main() {
     
-    VoskModel *vskModel = vosk_model_new("./models/vosk-model-small-ru-0.22");
+    VoskModel *vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");
     if (vskModel == NULL) {
         std::cerr << "Failed to create model\n";
         return -1;
@@ -20,7 +20,7 @@ int main() {
     }
     
 
-    std::ifstream wavFile("./Voice_test.wav", std::ios::binary);
+    std::ifstream wavFile("Voice_test.wav", std::ios::binary);
     
     if (!wavFile.is_open()) {
         std::cerr << "Failed to open file\n";
