@@ -71,6 +71,10 @@ std::string stt::extractTextFormJson(std::string f_jsonTypeText) {
     
     std::string _clearText = _bufferText.substr(_textStart, _textLenght);
     
+    std::cout << "text lenght:" << _textLenght << std::endl;
+    std::cout << "text start:" << _textStart << std::endl;
+    std::cout << "text end:" << _textEnds << std::endl;
+
     return _clearText;
 }
 
