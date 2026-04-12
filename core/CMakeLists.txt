@@ -23,9 +23,10 @@ include_directories(${STT_DIR})
 
 # Source files
 file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
 # Executable
-add_executable(core ${SOURCES})
+add_executable(core ${SOURCES} ${MAIN})
 
 # Link vosk library
 target_link_libraries(core ${VOSK_DIR}/libvosk.so)
