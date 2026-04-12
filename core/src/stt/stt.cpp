@@ -1,7 +1,9 @@
 #include "stt.h"
 #include <fstream>
 #include <iostream>
-stt::stt(const char *modelPath, float simpleRate) {}
+stt::stt(const char *modelPath, float simpleRate) {
+    voskInit();
+}
 
 void stt::voskInit(){
     VoskModel *vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");
