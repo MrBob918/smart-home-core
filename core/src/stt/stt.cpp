@@ -1,16 +1,18 @@
 #include "stt.h"
 #include <fstream>
 #include <iostream>
-stt::stt(const char *modelPath, float simpleRate) {
-    voskInit(modelPath, simpleRate);
+#include <ranges>
+stt::stt(const char *f_modelPath, float f_simpleRate) {
+    voskInit(f_modelPath, f_simpleRate);
 }
 
-void stt::voskInit(const char *modelPath, float simpleRate){
-    p_vskModel = vosk_model_new(modelPath);
+void stt::voskInit(const char *f_modelPath, float f_simpleRate){
+    p_vskModel = vosk_model_new(f_modelPath);
     if(p_vskModel == nullptr) {
         errorCheck(m_errorType::modelLoadFailed);
     }
-    p_vskRec = vosk_recognizer_new(p_vskModel, simpleRate);
+    
+    p_vskRec = vosk_recognizer_new(p_vskModel, f_simpleRate);
     if(p_vskRec == nullptr) {
         errorCheck(m_errorType::recognizerLoadFailed);
     }
@@ -24,63 +26,81 @@ stt::~stt(){
     stt::voskKill();
 }
 
-void stt::transcribeAudio(const char* wavFilePath) {
-    std::ifstream fileStream(wavFilePath, std::ios::binary);
-    if(!fileStream.is_open()){
+void stt::transcribeAudio(const char* f_wavFilePath) {
+    std::ifstream _fileStream(f_wavFilePath, std::ios::binary);
+    if(!_fileStream.is_open()){
         errorCheck(m_errorType::fileOpenFailed);
     }
-    fileStream.seekg(44, std::ios::beg);
+    
+    _fileStream.seekg(44, std::ios::beg);
 
-    const size_t BUFFER_SIZE = 4000;
-    char buffer[BUFFER_SIZE];
+    constexpr size_t _BUFFER_SIZE = 4000;
+    char _buffer[_BUFFER_SIZE];
 
-    while(fileStream.read(buffer, BUFFER_SIZE) || fileStream.gcount() > 0) {
-        size_t bytesLeft = fileStream.gcount();
-        short incomplitResult = vosk_recognizer_accept_waveform(p_vskRec, buffer, bytesLeft);
-        if(incomplitResult == -1){
+    while(_fileStream.read(_buffer, _BUFFER_SIZE) || _fileStream.gcount() > 0) {
+        size_t _bytesLeft = _fileStream.gcount();
+        short _uncomplitResult = vosk_recognizer_accept_waveform(p_vskRec, _buffer, _bytesLeft);
+        if(_uncomplitResult == -1){
             errorCheck(m_errorType::recongitionProcessFaild);
-            fileStream.close();
+            _fileStream.close();
         }
     }
+    
     stt::m_rawText = vosk_recognizer_final_result(p_vskRec);
-    fileStream.close();
+    _fileStream.close();
 }
 
-std::string stt::getFinalResult() {
-    std::cout << m_rawText;
-    return m_rawText;
+std::string stt::extractTextFormJson(std::string f_jsonTypeText) {
+    auto _iterOfTextStart = std::ranges::find(f_jsonTypeText, ':');
+    auto _iterOfTextEnds = std::ranges::find_if(f_jsonTypeText,[](auto i){return ((i == '"') && (i += '\n'));});
+    
+    size_t _textStart = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextStart);
+    size_t _textEnds = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextEnds);
+
+    size_t _textLenght = _textEnds - _textStart;
+    
+    std::string _clearText = f_jsonTypeText.substr(_textStart, _textLenght);
+    
+    return _clearText;
 }
 
-int stt::errorCheck(m_errorType error){
-    switch (error)
+std::string stt::getFinalResult() {    
+    std::string _clearText = extractTextFormJson(m_rawText);
+    return _clearText;
+}
+
+int stt::errorCheck(m_errorType f_error){
+    switch (f_error)
     {
     case m_errorType::modelLoadFailed :
         std::cerr << "Can't load your model, check directory with model or path!" << std::endl;
         stt::voskKill();
         std::abort();
+
     case m_errorType::recognizerLoadFailed :
         std::cerr << "Can't create recognaizer" << std::endl;
         stt::voskKill();
         std::abort();
+
     case m_errorType::fileOpenFailed :
         std::cerr << "Cant open wav file!" << std::endl;
         stt::voskKill();
         std::abort();
+
     case m_errorType::recongitionProcessFaild :
         std::cerr << "At recognition your audio file was error!" << std::endl;
         stt::voskKill();
         std::abort();
+
     default:
         std::cerr << "No errors find!" << std::endl;
         return 0;
     }
+    
     return 30;
 }
 
 void stt::reset(){
     vosk_recognizer_reset(p_vskRec);
     stt::m_rawText.clear();
-}
-
-std::string stt::extractTextFormJson(std::string m_rawText) {
 }
