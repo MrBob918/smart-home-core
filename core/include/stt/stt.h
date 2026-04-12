@@ -19,13 +19,13 @@ class stt{
     void reset();
     
     private:
-    VoskModel *vskModel;
+    VoskModel *p_vskModel;
     
-    VoskRecognizer *vskRec;
+    VoskRecognizer *p_vskRec;
 
-    std::string rawText;
+    std::string m_rawText;
     
-    enum errorType{
+    enum m_errorType{
         modelLoadFailed,
         recognizerLoadFailed,
         fileOpenFailed,
@@ -37,7 +37,7 @@ class stt{
     
     std::string extractTextFormJson(std::string);
     
-    int errorCheck(errorType);
+    int errorCheck(m_errorType);
 };
 
 
