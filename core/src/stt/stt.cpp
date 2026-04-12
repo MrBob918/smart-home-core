@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <ranges>
+#include <algorithm>
 stt::stt(const char *f_modelPath, float f_simpleRate) {
     voskInit(f_modelPath, f_simpleRate);
 }
@@ -52,11 +53,18 @@ void stt::transcribeAudio(const char* f_wavFilePath) {
 }
 
 std::string stt::extractTextFormJson(std::string f_jsonTypeText) {
-    auto _iterOfTextStart = std::ranges::find(f_jsonTypeText, ':');
-    auto _iterOfTextEnds = std::ranges::find_if(f_jsonTypeText,[](auto i){return ((i == '"') && (i += '\n'));});
+    auto _iterOfBufferTextStart = std::ranges::find(f_jsonTypeText, ':');
     
-    size_t _textStart = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextStart) + 3;
-    size_t _textEnds = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextEnds) + 1;
+    size_t _bufferTextStart = std::ranges::distance(f_jsonTypeText.begin(), _iterOfBufferTextStart);
+    size_t _bufferTextEnds = std::ranges::distance(_iterOfBufferTextStart, f_jsonTypeText.end());
+    
+    std::string _bufferText = f_jsonTypeText.substr(_bufferTextStart, _bufferTextEnds);
+
+    auto _iterOfTextStart = std::ranges::find(f_jsonTypeText, '"');
+    
+    size_t _textStart = std::ranges::distance(_bufferText.begin(), _iterOfTextStart);
+    size_t _textEnds = _bufferText.rfind('"');
+    
 
     size_t _textLenght = _textEnds - _textStart;
     

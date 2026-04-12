@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-#create list cmake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(DownloadVosk) #call Download vosk module
@@ -31,7 +30,7 @@ add_executable(core ${SOURCES})
 # Link vosk library
 target_link_libraries(core ${VOSK_DIR}/libvosk.so)
 
-# Set output directory
+# Output directory
 set_target_properties(core PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )

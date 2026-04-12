@@ -51,34 +51,33 @@
     {
       "name": "release",
       "displayName": "Build Release",
-      "configurePreset": "release",
-      "jobs": 4
+      "configurePreset": "release"
+      
     },
     {
       "name": "debug",
       "displayName": "Build Debug",
-      "configurePreset": "debug",
-      "jobs": 4
+      "configurePreset": "debug"
     },
     {
       "name": "relwithdebinfo",
       "displayName": "Build RelWithDebInfo",
-      "configurePreset": "relwithdebinfo",
-      "jobs": 4
+      "configurePreset": "relwithdebinfo"
+      
     },
     {
       "name": "release-verbose",
       "displayName": "Build Release (Verbose)",
       "configurePreset": "release",
-      "verbose": true,
-      "jobs": 4
+      "verbose": true
+      
     },
     {
       "name": "debug-verbose",
       "displayName": "Build Debug (Verbose)",
       "configurePreset": "debug",
-      "verbose": true,
-      "jobs": 4
+      "verbose": true
+      
     }
   ],
   "testPresets": [
