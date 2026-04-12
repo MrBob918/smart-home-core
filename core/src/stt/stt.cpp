@@ -62,11 +62,10 @@ std::string stt::extractTextFormJson(std::string f_jsonTypeText) {
 
     std::string _bufferText = f_jsonTypeText.substr(_bufferTextStart, _bufferTextLenght);
 
-    auto _iterOfTextStart = std::ranges::find(f_jsonTypeText, '"');
+    auto _iterOfTextStart = std::ranges::find(_bufferText, '"');
     
     size_t _textStart = std::ranges::distance(_bufferText.begin(), _iterOfTextStart);
     size_t _textEnds = _bufferText.rfind('"');
-    
 
     size_t _textLenght = _textEnds - _textStart;
     
