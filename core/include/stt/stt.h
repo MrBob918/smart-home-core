@@ -32,7 +32,7 @@ class stt{
         recongitionProcessFaild
     };
     
-    void voskInit();
+    void voskInit(const char *modelPath, float simpleRate);
     void voskKill();
     
     std::string extractTextFormJson(std::string);

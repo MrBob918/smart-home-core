@@ -2,15 +2,15 @@
 #include <fstream>
 #include <iostream>
 stt::stt(const char *modelPath, float simpleRate) {
-    voskInit();
+    voskInit(modelPath, simpleRate);
 }
 
-void stt::voskInit(){
-    VoskModel *vskModel = vosk_model_new("models/vosk-model-small-ru-0.22");
+void stt::voskInit(const char *modelPath, float simpleRate){
+    VoskModel *vskModel = vosk_model_new(modelPath);
     if(vskModel == nullptr) {
         errorCheck(errorType::modelLoadFailed);
     }
-    VoskRecognizer *vskRec = vosk_recognizer_new(vskModel, 44100);
+    VoskRecognizer *vskRec = vosk_recognizer_new(vskModel, simpleRate);
     if(vskRec == nullptr) {
         errorCheck(errorType::recognizerLoadFailed);
     }
@@ -57,19 +57,19 @@ int stt::errorCheck(errorType error){
     case errorType::modelLoadFailed :
         std::cerr << "Can't load your model, check directory with model or path!" << std::endl;
         stt::voskKill();
-        return 1;
+        std::abort();
     case errorType::recognizerLoadFailed :
         std::cerr << "Can't create recognaizer" << std::endl;
         stt::voskKill();
-        return 2;
+        std::abort();
     case errorType::fileOpenFailed :
         std::cerr << "Cant open wav file!" << std::endl;
         stt::voskKill();
-        return 3;
+        std::abort();
     case errorType::recongitionProcessFaild :
         std::cerr << "At recognition your audio file was error!" << std::endl;
         stt::voskKill();
-        return 4;
+        std::abort();
     default:
         std::cerr << "No errors find!" << std::endl;
         return 0;
