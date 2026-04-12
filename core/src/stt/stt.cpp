@@ -33,7 +33,8 @@ void stt::transcribeAudio(const char* wavFilePath) {
     char buffer[bufferSize];
 
     while(fileStream.read(buffer, bufferSize) || fileStream.gcount() > 0) {
-        short incomplitResult = vosk_recognizer_accept_waveform(vskRec, buffer, bufferSize);
+        size_t bytesLeft = fileStream.gcount();
+        short incomplitResult = vosk_recognizer_accept_waveform(vskRec, buffer, bytesLeft);
         if(incomplitResult == -1){
             errorCheck(errorType::recongitionProcessFaild);
             fileStream.close();
