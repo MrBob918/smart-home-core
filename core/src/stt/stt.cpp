@@ -39,6 +39,7 @@ void stt::transcribeAudio(const char* f_wavFilePath) {
 
     while(_fileStream.read(_buffer, _BUFFER_SIZE) || _fileStream.gcount() > 0) {
         size_t _bytesLeft = _fileStream.gcount();
+        
         short _uncomplitResult = vosk_recognizer_accept_waveform(p_vskRec, _buffer, _bytesLeft);
         if(_uncomplitResult == -1){
             errorCheck(m_errorType::recongitionProcessFaild);
@@ -54,8 +55,8 @@ std::string stt::extractTextFormJson(std::string f_jsonTypeText) {
     auto _iterOfTextStart = std::ranges::find(f_jsonTypeText, ':');
     auto _iterOfTextEnds = std::ranges::find_if(f_jsonTypeText,[](auto i){return ((i == '"') && (i += '\n'));});
     
-    size_t _textStart = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextStart);
-    size_t _textEnds = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextEnds);
+    size_t _textStart = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextStart) + 3;
+    size_t _textEnds = std::ranges::distance(f_jsonTypeText.begin(), _iterOfTextEnds) - 1;
 
     size_t _textLenght = _textEnds - _textStart;
     
