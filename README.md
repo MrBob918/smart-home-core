@@ -75,7 +75,7 @@ smart-home-core/
 │                  │
 └────┬────────┬────┘
      │        │
-     │ gRPC   │ gRPC
+     │ gRPC   │ HTTP
      v        v
 ┌─────────┐  ┌─────────┐
 │   STT   │  │   LLM   │
