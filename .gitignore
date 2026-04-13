@@ -36,7 +36,7 @@ vosk-api/
 models/**
 /models/
 /vosk-include/**
-/vosk-include
+**/vosk-include
 
 # Docker
 .dockerignore
@@ -70,3 +70,7 @@ Testing/
 *.gcda
 *.gcno
 *.gcov
+
+# gRPC
+stt-server/proto/
+http-server/proto/

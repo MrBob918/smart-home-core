@@ -1,19 +1,20 @@
 cmake_minimum_required(VERSION 3.15)
-project(Core VERSION 1.0.0 LANGUAGES CXX)
+project(STTServer VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Добавляем путь к cmake модулям
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-include(DownloadVosk) #call Download vosk module
+include(DownloadVosk)
 include(DownloadVoskModel)
 
 # Vosk library path
 set(VOSK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/vosk-include)
 
-# stt library path
+# STT library path
 set(STT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/stt)
 
 # Include directories
@@ -22,16 +23,16 @@ include_directories(${VOSK_DIR})
 include_directories(${STT_DIR})
 
 # Source files
-file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-file(GLOB MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+file(GLOB_RECURSE STT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/stt/*.cpp)
+set(MAIN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/stt-main.cpp)
 
 # Executable
-add_executable(core ${SOURCES} ${MAIN})
+add_executable(stt-server ${STT_SOURCES} ${MAIN_SOURCE})
 
 # Link vosk library
-target_link_libraries(core ${VOSK_DIR}/libvosk.so)
+target_link_libraries(stt-server ${VOSK_DIR}/libvosk.so)
 
 # Output directory
-set_target_properties(core PROPERTIES
+set_target_properties(stt-server PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
