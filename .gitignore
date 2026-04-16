@@ -74,3 +74,24 @@ Testing/
 # gRPC
 stt-server/proto/
 http-server/proto/
+
+# gRPC generated files
+**/*.pb.h
+**/*.pb.cc
+**/*.grpc.pb.h
+**/*.grpc.pb.cc
+**/proto/generated/
+
+# Protobuf
+*.pb.go
+*_pb2.py
+*_pb2_grpc.py
+
+# gRPC certificates (если будешь использовать TLS)
+*.pem
+*.key
+*.crt
+*.csr
+
+# gRPC logs and debug
+grpc_*.log
