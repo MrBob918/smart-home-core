@@ -35,7 +35,7 @@ add_executable(stt-server ${STT_SOURCES} ${MAIN_SOURCE})
 target_add_protobuf(stt-server ${STT_PROTO_FILE}) # connect gRPC and protonbuf
 
 # Link vosk library
-target_link_libraries(stt-server ${VOSK_DIR}/libvosk.so grpc++ grpc libprotobuf)
+target_link_libraries(stt-server ${VOSK_DIR}/libvosk.so grpc++ grpc protobuf::libprotobuf)
 
 # Output directory
 set_target_properties(stt-server PROPERTIES

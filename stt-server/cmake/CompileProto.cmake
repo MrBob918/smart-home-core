@@ -12,7 +12,7 @@ find_package(ZLIB REQUIRED)
 FetchContent_Declare(
         protobuf
         GIT_REPOSITORY https://github.com/google/protobuf.git
-        GIT_TAG        v34.1
+        GIT_TAG        v34.0
         GIT_PROGRESS   TRUE
         GIT_SHALLOW    TRUE
         USES_TERMINAL_DOWNLOAD TRUE
@@ -27,15 +27,7 @@ set(protobuf_DISABLE_RTTI ON)
 set(protobuf_MSVC_STATIC_RUNTIME ON)
 set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
 
-
 FetchContent_MakeAvailable(protobuf)
-set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}")
-
-if(NOT TARGET libprotobuf or libprotobuf-lite)
-    FetchContent_MakeAvailable(protobuf)
-    set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}")
-endif()
-
 
 FetchContent_Declare(
         grpc
@@ -44,7 +36,7 @@ FetchContent_Declare(
         GIT_PROGRESS   TRUE
         GIT_SHALLOW    TRUE
         USES_TERMINAL_DOWNLOAD TRUE
-        GIT_SUBMODULES_RECURSE FALSE
+        GIT_SUBMODULES_RECURSE TRUE
         GIT_SUBMODULES
             "third_party/cares"
             "third_party/boringssl-with-bazel"
@@ -53,8 +45,8 @@ FetchContent_Declare(
 )
 
 set(gRPC_BUILD_TESTS OFF)
-set(gRPC_BUILD_CODEGEN ON) # for grpc_cpp_plugin
-set(gRPC_BUILD_GRPC_CPP_PLUGIN ON) # we want to use only C++ plugin
+set(gRPC_BUILD_CODEGEN ON)
+set(gRPC_BUILD_GRPC_CPP_PLUGIN ON)
 set(gRPC_BUILD_CSHARP_EXT OFF)
 set(gRPC_BUILD_GRPC_CSHARP_PLUGIN OFF)
 set(gRPC_BUILD_GRPC_NODE_PLUGIN OFF)
@@ -64,17 +56,12 @@ set(gRPC_BUILD_GRPC_PYTHON_PLUGIN OFF)
 set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
 
 set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
-set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
+set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
 set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
-
-# use lite protobuf version, unless we start using features
-# that require full protobuf
 set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
+set(PROTOBUF_ROOT_DIR "${CMAKE_BINARY_DIR}/_deps/protobuf-src")
 
-if(NOT TARGET grpc)
-    FetchContent_MakeAvailable(grpc)
-    add_subdirectory(${grpc_SOURCE_DIR} ${grpc_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
+FetchContent_MakeAvailable(grpc)
 
 if(NOT TARGET protoc)
     message(FATAL_ERROR "Can not find target protoc")
