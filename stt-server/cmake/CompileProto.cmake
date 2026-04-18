@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.5)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 set(CMAKE_POLICY_DEFAULT_CMP0074 NEW)
 
@@ -12,7 +12,7 @@ find_package(ZLIB REQUIRED)
 FetchContent_Declare(
         protobuf
         GIT_REPOSITORY https://github.com/google/protobuf.git
-        GIT_TAG        v3.19.3
+        GIT_TAG        v34.1
         GIT_PROGRESS   TRUE
         GIT_SHALLOW    TRUE
         USES_TERMINAL_DOWNLOAD TRUE
@@ -28,9 +28,11 @@ set(protobuf_MSVC_STATIC_RUNTIME ON)
 set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
 
 
-FetchContent_GetProperties(protobuf)
-if(NOT protobuf_POPULATED)
-    FetchContent_Populate(protobuf)
+FetchContent_MakeAvailable(protobuf)
+set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}")
+
+if(NOT TARGET libprotobuf or libprotobuf-lite)
+    FetchContent_MakeAvailable(protobuf)
     set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}")
 endif()
 
@@ -38,7 +40,7 @@ endif()
 FetchContent_Declare(
         grpc
         GIT_REPOSITORY https://github.com/grpc/grpc.git
-        GIT_TAG        v1.43.0
+        GIT_TAG        v1.80.0
         GIT_PROGRESS   TRUE
         GIT_SHALLOW    TRUE
         USES_TERMINAL_DOWNLOAD TRUE
@@ -67,15 +69,12 @@ set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
 
 # use lite protobuf version, unless we start using features
 # that require full protobuf
-set(gRPC_USE_PROTO_LITE ON CACHE BOOL "" FORCE)
+set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
 
-
-FetchContent_GetProperties(grpc)
-if(NOT grpc_POPULATED)
-    FetchContent_Populate(grpc)
+if(NOT TARGET grpc)
+    FetchContent_MakeAvailable(grpc)
     add_subdirectory(${grpc_SOURCE_DIR} ${grpc_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
-
 
 if(NOT TARGET protoc)
     message(FATAL_ERROR "Can not find target protoc")
