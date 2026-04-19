@@ -9,25 +9,25 @@ set(ABSL_PROPAGATE_CXX_STD ON)
 set(ABSL_ENABLE_INSTALL ON)
 find_package(ZLIB REQUIRED)
 
-FetchContent_Declare(
-        protobuf
-        GIT_REPOSITORY https://github.com/google/protobuf.git
-        GIT_TAG        v34.0
-        GIT_PROGRESS   TRUE
-        GIT_SHALLOW    TRUE
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_SUBMODULES_RECURSE FALSE
-        GIT_SUBMODULES ""
-)
-set(protobuf_BUILD_TESTS OFF)
-set(protobuf_BUILD_CONFORMANCE OFF)
-set(protobuf_BUILD_EXAMPLES OFF)
-set(protobuf_BUILD_PROTOC_BINARIES ON)
-set(protobuf_DISABLE_RTTI ON)
-set(protobuf_MSVC_STATIC_RUNTIME ON)
-set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
+# FetchContent_Declare(
+#         protobuf
+#         GIT_REPOSITORY https://github.com/google/protobuf.git
+#         GIT_TAG        v34.0
+#         GIT_PROGRESS   TRUE
+#         GIT_SHALLOW    TRUE
+#         USES_TERMINAL_DOWNLOAD TRUE
+#         GIT_SUBMODULES_RECURSE FALSE
+#         GIT_SUBMODULES ""
+# )
+# set(protobuf_BUILD_TESTS OFF)
+# set(protobuf_BUILD_CONFORMANCE OFF)
+# set(protobuf_BUILD_EXAMPLES OFF)
+# set(protobuf_BUILD_PROTOC_BINARIES ON)
+# set(protobuf_DISABLE_RTTI ON)
+# set(protobuf_MSVC_STATIC_RUNTIME ON)
+# set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(protobuf)
+# FetchContent_MakeAvailable(protobuf)
 
 FetchContent_Declare(
         grpc
@@ -56,7 +56,7 @@ set(gRPC_BUILD_GRPC_PYTHON_PLUGIN OFF)
 set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
 
 set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
-set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "")
+set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
 set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
 set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
 set(PROTOBUF_ROOT_DIR "${CMAKE_BINARY_DIR}/_deps/protobuf-src")
