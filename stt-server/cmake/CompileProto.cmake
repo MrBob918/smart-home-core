@@ -26,6 +26,12 @@ set(protobuf_BUILD_PROTOC_BINARIES ON)
 set(protobuf_DISABLE_RTTI ON)
 set(protobuf_MSVC_STATIC_RUNTIME ON)
 set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
+set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
+set(gRPC_PROTOBUF_PACKAGE_TYPE "module" CACHE STRING "" FORCE)
+set(protobuf_SOURCE_DIR "${protobuf_SOURCE_DIR}") 
+set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}")
+
+FetchContent_Populate(protobuf)
 
 FetchContent_Declare(
         grpc
@@ -54,14 +60,10 @@ set(gRPC_BUILD_GRPC_PYTHON_PLUGIN OFF)
 set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
 
 set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
-set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
 set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
 set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
-set(PROTOBUF_ROOT_DIR "${CMAKE_BINARY_DIR}/_deps/protobuf-src")
-
 
 FetchContent_MakeAvailable(grpc)
-FetchContent_MakeAvailable(protobuf)
 
 if(NOT TARGET protoc)
     message(FATAL_ERROR "Can not find target protoc")
