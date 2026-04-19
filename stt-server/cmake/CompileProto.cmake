@@ -13,7 +13,7 @@ find_package(Protobuf QUIET)
 find_package(gRPC QUIET CONFIG)
 
 if(NOT (Protobuf_FOUND))
-FetchContent_Declare(
+    FetchContent_Declare(
         protobuf
         GIT_REPOSITORY https://github.com/google/protobuf.git
         GIT_TAG        v34.0
@@ -22,33 +22,32 @@ FetchContent_Declare(
         USES_TERMINAL_DOWNLOAD TRUE
         GIT_SUBMODULES_RECURSE FALSE
         GIT_SUBMODULES ""
-)
-set(protobuf_BUILD_TESTS OFF)
-set(protobuf_BUILD_CONFORMANCE OFF)
-set(protobuf_BUILD_EXAMPLES OFF)
-set(protobuf_BUILD_PROTOC_BINARIES ON)
-set(protobuf_DISABLE_RTTI ON)
-set(protobuf_MSVC_STATIC_RUNTIME ON)
-set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
-set(gRPC_PROTOBUF_PACKAGE_TYPE "module" CACHE STRING "" FORCE)
-set(protobuf_SOURCE_DIR "${protobuf_SOURCE_DIR}") 
+    )
 
-FetchContent_GetProperties(protobuf)
-if(NOT protobuf_POPULATED)
-    FetchContent_Populate(protobuf)
-endif()
+    set(protobuf_BUILD_TESTS OFF)
+    set(protobuf_BUILD_CONFORMANCE OFF)
+    set(protobuf_BUILD_EXAMPLES OFF)
+    set(protobuf_BUILD_PROTOC_BINARIES ON)
+    set(protobuf_DISABLE_RTTI ON)
+    set(protobuf_MSVC_STATIC_RUNTIME ON)
+    set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
+    set(gRPC_PROTOBUF_PACKAGE_TYPE "module" CACHE STRING "" FORCE)
+    set(protobuf_SOURCE_DIR "${protobuf_SOURCE_DIR}") 
 
+    FetchContent_GetProperties(protobuf)
+    if(NOT protobuf_POPULATED)
+        FetchContent_Populate(protobuf)
+    endif()
 
-
-set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
+    set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
+    set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}" CACHE PATH "" FORCE)
 elseif(Protobuf_FOUND)
-set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
+    set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
 endif()
-set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}" CACHE PATH "" FORCE)
 
 if(NOT (grpc_FOUND))
 
-FetchContent_Declare(
+    FetchContent_Declare(
         grpc
         GIT_REPOSITORY https://github.com/grpc/grpc.git
         GIT_TAG        v1.80.0
@@ -61,35 +60,54 @@ FetchContent_Declare(
             "third_party/boringssl-with-bazel"
             "third_party/re2"
             "third_party/abseil-cpp"
-)
+    )
 
-set(gRPC_BUILD_TESTS OFF)
-set(gRPC_BUILD_CODEGEN ON)
-set(gRPC_BUILD_GRPC_CPP_PLUGIN ON)
-set(gRPC_BUILD_CSHARP_EXT OFF)
-set(gRPC_BUILD_GRPC_CSHARP_PLUGIN OFF)
-set(gRPC_BUILD_GRPC_NODE_PLUGIN OFF)
-set(gRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN OFF)
-set(gRPC_BUILD_GRPC_PHP_PLUGIN OFF)
-set(gRPC_BUILD_GRPC_PYTHON_PLUGIN OFF)
-set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
+    set(gRPC_BUILD_TESTS OFF)
+    set(gRPC_BUILD_CODEGEN ON)
+    set(gRPC_BUILD_GRPC_CPP_PLUGIN ON)
+    set(gRPC_BUILD_CSHARP_EXT OFF)
+    set(gRPC_BUILD_GRPC_CSHARP_PLUGIN OFF)
+    set(gRPC_BUILD_GRPC_NODE_PLUGIN OFF)
+    set(gRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN OFF)
+    set(gRPC_BUILD_GRPC_PHP_PLUGIN OFF)
+    set(gRPC_BUILD_GRPC_PYTHON_PLUGIN OFF)
+    set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
+    set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
+    set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
+    set(gRPC_USE_PROTO_LITE ON CACHE BOOL "" FORCE)
 
-set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
-set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
-set(gRPC_USE_PROTO_LITE ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(grpc)
 
-FetchContent_MakeAvailable(grpc)
+    if(NOT TARGET protoc)
+        message(FATAL_ERROR "Can not find target protoc")
+    endif()
+    set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE $<TARGET_FILE:protoc>)
+    set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR "${protobuf_SOURCE_DIR}/src")
+
+elseif(grpc_FOUND)
+    
+    message(STATUS "Using system-installed gRPC")
+    
+    if(NOT Protobuf_PROTOC_EXECUTABLE)
+        find_program(Protobuf_PROTOC_EXECUTABLE protoc)
+        if(NOT Protobuf_PROTOC_EXECUTABLE)
+            message(FATAL_ERROR "protoc executable not found")
+        endif()
+    endif()
+
+    find_program(_gRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
+    if(NOT _gRPC_CPP_PLUGIN_EXECUTABLE)
+        message(FATAL_ERROR "grpc_cpp_plugin not found")
+    endif()
+
+    set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE ${Protobuf_PROTOC_EXECUTABLE})
+    set(_gRPC_CPP_PLUGIN ${_gRPC_CPP_PLUGIN_EXECUTABLE})
+    set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR ${Protobuf_INCLUDE_DIRS})
+    
 endif()
-
-if(NOT TARGET protoc)
-    message(FATAL_ERROR "Can not find target protoc")
-endif()
-set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE $<TARGET_FILE:protoc>)
 
 set(_gRPC_PROTO_GENS_DIR ${CMAKE_BINARY_DIR}/gens)
 file(MAKE_DIRECTORY ${_gRPC_PROTO_GENS_DIR})
-set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR "${protobuf_SOURCE_DIR}/src")
-
 
 # Example:
 # In CMake:
@@ -122,6 +140,7 @@ function(target_add_protobuf target)
         if(NOT TARGET grpc_cpp_plugin)
             message(FATAL_ERROR "Can not find target grpc_cpp_plugin")
         endif()
+        
         set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
 
         add_custom_command(
@@ -154,5 +173,18 @@ function(target_add_protobuf target)
             $<BUILD_INTERFACE:${grpc_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${grpc_SOURCE_DIR}/third_party/abseil-cpp>
         )
+        if(_gRPC_INCLUDE_DIR)
+            target_include_directories(${target} PRIVATE
+                $<BUILD_INTERFACE:${_gRPC_INCLUDE_DIR}>
+            )
+        endif()
+
+        if(_ABSEIL_INCLUDE_DIR)
+            target_include_directories(${target} PRIVATE
+                $<BUILD_INTERFACE:${_ABSEIL_INCLUDE_DIR}>
+            )
+        endif()
+
+
     endforeach()
 endfunction()
