@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package stt;
+package sttProto;
 
 service SpeechToText {
     rpc Recognize(RecognizeRequest) returns (RecognizeResponse);
