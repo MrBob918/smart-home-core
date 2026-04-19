@@ -7,8 +7,12 @@ include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 set(ABSL_PROPAGATE_CXX_STD ON)
 set(ABSL_ENABLE_INSTALL ON)
-find_package(ZLIB REQUIRED)
 
+find_package(ZLIB REQUIRED)
+find_package(Protobuf QUIET)
+find_package(gRPC QUIET CONFIG)
+
+if(NOT (Protobuf_FOUND))
 FetchContent_Declare(
         protobuf
         GIT_REPOSITORY https://github.com/google/protobuf.git
@@ -34,8 +38,15 @@ if(NOT protobuf_POPULATED)
     FetchContent_Populate(protobuf)
 endif()
 
+
+
 set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
+elseif(Protobuf_FOUND)
+set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
+endif()
 set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}" CACHE PATH "" FORCE)
+
+if(NOT (grpc_FOUND))
 
 FetchContent_Declare(
         grpc
@@ -65,9 +76,10 @@ set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
 
 set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
 set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
-set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
+set(gRPC_USE_PROTO_LITE ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(grpc)
+endif()
 
 if(NOT TARGET protoc)
     message(FATAL_ERROR "Can not find target protoc")
