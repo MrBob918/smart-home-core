@@ -86,7 +86,7 @@ if(NOT (gRPC_FOUND))
     set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
     set(_gRPC_INCLUDE_DIR "${grpc_SOURCE_DIR}/include")
     set(_ABSEIL_INCLUDE_DIR "${grpc_SOURCE_DIR}/third_party/abseil-cpp")
-elseif(grpc_FOUND)
+elseif(gRPC_FOUND)
     
     message(STATUS "Using system-installed gRPC")
     
