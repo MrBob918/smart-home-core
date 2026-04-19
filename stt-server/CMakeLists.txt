@@ -46,6 +46,7 @@ if(TARGET grpc++)
     )
 else()
     # Системные библиотеки - добавляем все зависимости явно
+    find_package(absl REQUIRED)
     target_link_libraries(stt-server 
         ${VOSK_DIR}/libvosk.so 
         grpc++ 
@@ -54,6 +55,8 @@ else()
         upb 
         address_sorting 
         protobuf::libprotobuf
+        absl::synchronization
+        absl::base
     )
 endif()
 

@@ -10,9 +10,31 @@ set(ABSL_ENABLE_INSTALL ON)
 
 find_package(ZLIB REQUIRED)
 find_package(Protobuf QUIET)
-find_package(gRPC QUIET CONFIG)
 
-if(NOT (Protobuf_FOUND))
+message(STATUS "Protobuf_FOUND: ${Protobuf_FOUND}")
+
+# Проверяем наличие grpc_cpp_plugin
+find_program(_gRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
+
+# Если найден системный Protobuf и grpc_cpp_plugin - используем системные библиотеки
+if(Protobuf_FOUND AND _gRPC_CPP_PLUGIN_EXECUTABLE)
+    message(STATUS "Using system-installed Protobuf and gRPC")
+    set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
+    
+    if(NOT Protobuf_PROTOC_EXECUTABLE)
+        find_program(Protobuf_PROTOC_EXECUTABLE protoc)
+        if(NOT Protobuf_PROTOC_EXECUTABLE)
+            message(FATAL_ERROR "protoc executable not found")
+        endif()
+    endif()
+
+    set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE ${Protobuf_PROTOC_EXECUTABLE})
+    set(_gRPC_CPP_PLUGIN ${_gRPC_CPP_PLUGIN_EXECUTABLE})
+    set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR ${Protobuf_INCLUDE_DIRS})
+    
+# Если не найдены оба или один из них - используем FetchContent
+else()
+    message(STATUS "Using FetchContent for Protobuf and gRPC")
     FetchContent_Declare(
         protobuf
         GIT_REPOSITORY https://github.com/google/protobuf.git
@@ -41,11 +63,6 @@ if(NOT (Protobuf_FOUND))
 
     set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
     set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}" CACHE PATH "" FORCE)
-elseif(Protobuf_FOUND)
-    set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
-endif()
-
-if(NOT (gRPC_FOUND))
 
     FetchContent_Declare(
         grpc
@@ -86,26 +103,6 @@ if(NOT (gRPC_FOUND))
     set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
     set(_gRPC_INCLUDE_DIR "${grpc_SOURCE_DIR}/include")
     set(_ABSEIL_INCLUDE_DIR "${grpc_SOURCE_DIR}/third_party/abseil-cpp")
-elseif(gRPC_FOUND)
-    
-    message(STATUS "Using system-installed gRPC")
-    
-    if(NOT Protobuf_PROTOC_EXECUTABLE)
-        find_program(Protobuf_PROTOC_EXECUTABLE protoc)
-        if(NOT Protobuf_PROTOC_EXECUTABLE)
-            message(FATAL_ERROR "protoc executable not found")
-        endif()
-    endif()
-
-    find_program(_gRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
-    if(NOT _gRPC_CPP_PLUGIN_EXECUTABLE)
-        message(FATAL_ERROR "grpc_cpp_plugin not found")
-    endif()
-
-    set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE ${Protobuf_PROTOC_EXECUTABLE})
-    set(_gRPC_CPP_PLUGIN ${_gRPC_CPP_PLUGIN_EXECUTABLE})
-    set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR ${Protobuf_INCLUDE_DIRS})
-    
 endif()
 
 set(_gRPC_PROTO_GENS_DIR ${CMAKE_BINARY_DIR}/gens)
