@@ -45,7 +45,7 @@ elseif(Protobuf_FOUND)
     set(gRPC_PROTOBUF_PROVIDER "package" CACHE STRING "" FORCE)
 endif()
 
-if(NOT (grpc_FOUND))
+if(NOT (gRPC_FOUND))
 
     FetchContent_Declare(
         grpc
@@ -74,7 +74,7 @@ if(NOT (grpc_FOUND))
     set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF)
     set(gRPC_BENCHMARK_PROVIDER "none" CACHE STRING "" FORCE)
     set(gRPC_ZLIB_PROVIDER "package" CACHE STRING "" FORCE)
-    set(gRPC_USE_PROTO_LITE ON CACHE BOOL "" FORCE)
+    set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
 
     FetchContent_MakeAvailable(grpc)
 
@@ -83,7 +83,9 @@ if(NOT (grpc_FOUND))
     endif()
     set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE $<TARGET_FILE:protoc>)
     set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR "${protobuf_SOURCE_DIR}/src")
-
+    set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
+    set(_gRPC_INCLUDE_DIR "${grpc_SOURCE_DIR}/include")
+    set(_ABSEIL_INCLUDE_DIR "${grpc_SOURCE_DIR}/third_party/abseil-cpp")
 elseif(grpc_FOUND)
     
     message(STATUS "Using system-installed gRPC")
@@ -137,10 +139,6 @@ function(target_add_protobuf target)
             set(RELFIL_WE "${REL_DIR}/${FIL_WE}")
         endif()
 
-        if(NOT TARGET grpc_cpp_plugin)
-            message(FATAL_ERROR "Can not find target grpc_cpp_plugin")
-        endif()
-        
         set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
 
         add_custom_command(
@@ -170,8 +168,6 @@ function(target_add_protobuf target)
         target_include_directories(${target} PRIVATE
             $<BUILD_INTERFACE:${_gRPC_PROTO_GENS_DIR}>
             $<BUILD_INTERFACE:${_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR}>
-            $<BUILD_INTERFACE:${grpc_SOURCE_DIR}/include>
-            $<BUILD_INTERFACE:${grpc_SOURCE_DIR}/third_party/abseil-cpp>
         )
         if(_gRPC_INCLUDE_DIR)
             target_include_directories(${target} PRIVATE
