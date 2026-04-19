@@ -1,6 +1,6 @@
 #include "stt.h"
-#include "proto/stt.pb.h"
-#include "proto/stt.grpc.pb.h"
+#include "gens/proto/stt.pb.h"
+#include "gens/proto/stt.grpc.pb.h"
 #include <iostream>
 int main() {
     stt sttClass("./models/vosk-model-small-ru-0.22", 44100);
