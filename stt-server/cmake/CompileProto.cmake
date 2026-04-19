@@ -128,17 +128,23 @@ function(target_add_protobuf target)
     endif()
 
     set(_protobuf_include_path -I . -I .. -I ${_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR})
-    foreach(FIL ${ARGN})
-        get_filename_component(ABS_FIL ${FIL} ABSOLUTE)
-        get_filename_component(FIL_WE ${FIL} NAME_WE)
+foreach(FIL ${ARGN})
+    get_filename_component(ABS_FIL ${FIL} ABSOLUTE)
+    get_filename_component(FIL_WE ${FIL} NAME_WE)
+    file(RELATIVE_PATH REL_FIL ${CMAKE_CURRENT_SOURCE_DIR} ${ABS_FIL})
+    
+    # Если путь начинается с "..", пересчитать относительно родительской директории
+    if(REL_FIL MATCHES "^\\.\\.")
         get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
-        file(RELATIVE_PATH REL_FIL ${CMAKE_CURRENT_SOURCE_DIR} ${ABS_FIL})
-        get_filename_component(REL_DIR ${REL_FIL} DIRECTORY)
-        if(NOT REL_DIR)
-            set(RELFIL_WE "${FIL_WE}")
-        else()
-            set(RELFIL_WE "${REL_DIR}/${FIL_WE}")
-        endif()
+        file(RELATIVE_PATH REL_FIL ${PARENT_DIR} ${ABS_FIL})
+    endif()
+    
+    get_filename_component(REL_DIR ${REL_FIL} DIRECTORY)
+    if(NOT REL_DIR)
+        set(RELFIL_WE "${FIL_WE}")
+    else()
+        set(RELFIL_WE "${REL_DIR}/${FIL_WE}")
+    endif()
 
         add_custom_command(
         OUTPUT  "${_gRPC_PROTO_GENS_DIR}/${RELFIL_WE}.grpc.pb.cc"
