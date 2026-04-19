@@ -26,12 +26,16 @@ set(protobuf_BUILD_PROTOC_BINARIES ON)
 set(protobuf_DISABLE_RTTI ON)
 set(protobuf_MSVC_STATIC_RUNTIME ON)
 set(protobuf_WITH_ZLIB ON CACHE BOOL "" FORCE)
-set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
 set(gRPC_PROTOBUF_PACKAGE_TYPE "module" CACHE STRING "" FORCE)
 set(protobuf_SOURCE_DIR "${protobuf_SOURCE_DIR}") 
-set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}")
 
-FetchContent_Populate(protobuf)
+FetchContent_GetProperties(protobuf)
+if(NOT protobuf_POPULATED)
+    FetchContent_Populate(protobuf)
+endif()
+
+set(gRPC_PROTOBUF_PROVIDER "module" CACHE STRING "" FORCE)
+set(PROTOBUF_ROOT_DIR "${protobuf_SOURCE_DIR}" CACHE PATH "" FORCE)
 
 FetchContent_Declare(
         grpc
