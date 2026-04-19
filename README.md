@@ -39,8 +39,10 @@ smart-home-core/
 ### Требования
 
 - CPU архитектура AArch64 (расчитано на RPI 5)
-- CMake >= 3.5
+- docker containers with bookworm 12
 - C++20 компилятор (проверялось все на GCC)
+- CMake >= 3.5
+- gRPC with protobuf
 - ... (полноценный список составлю под конец проекта)
 
 
