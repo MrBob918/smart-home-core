@@ -60,8 +60,8 @@ set(gRPC_USE_PROTO_LITE OFF CACHE BOOL "" FORCE)
 set(PROTOBUF_ROOT_DIR "${CMAKE_BINARY_DIR}/_deps/protobuf-src")
 
 
-FetchContent_MakeAvailable(protobuf)
 FetchContent_MakeAvailable(grpc)
+FetchContent_MakeAvailable(protobuf)
 
 if(NOT TARGET protoc)
     message(FATAL_ERROR "Can not find target protoc")
