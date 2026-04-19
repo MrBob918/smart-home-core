@@ -127,7 +127,7 @@ function(target_add_protobuf target)
         return()
     endif()
 
-    set(_protobuf_include_path -I . -I ${CMAKE_CURRENT_SOURCE_DIR}/.. -I ${_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR})
+    set(_protobuf_include_path -I . -I .. -I ${_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR})
     foreach(FIL ${ARGN})
         get_filename_component(ABS_FIL ${FIL} ABSOLUTE)
         get_filename_component(FIL_WE ${FIL} NAME_WE)
