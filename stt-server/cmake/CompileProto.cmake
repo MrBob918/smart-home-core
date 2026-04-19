@@ -83,6 +83,7 @@ if(NOT (gRPC_FOUND))
     endif()
     set(_gRPC_PROTOBUF_PROTOC_EXECUTABLE $<TARGET_FILE:protoc>)
     set(_gRPC_PROTOBUF_WELLKNOWN_INCLUDE_DIR "${protobuf_SOURCE_DIR}/src")
+    set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
     set(_gRPC_INCLUDE_DIR "${grpc_SOURCE_DIR}/include")
     set(_ABSEIL_INCLUDE_DIR "${grpc_SOURCE_DIR}/third_party/abseil-cpp")
 elseif(grpc_FOUND)
@@ -137,8 +138,6 @@ function(target_add_protobuf target)
         else()
             set(RELFIL_WE "${REL_DIR}/${FIL_WE}")
         endif()
-
-        set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
 
         add_custom_command(
         OUTPUT  "${_gRPC_PROTO_GENS_DIR}/${RELFIL_WE}.grpc.pb.cc"
