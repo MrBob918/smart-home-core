@@ -19,7 +19,7 @@ set(VOSK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/vosk-include)
 # STT library path
 set(STT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/stt)
 
-set(STT_PROTO_FILE ${CMAKE_CURRENT_SOURCE_DIR}/) # stt.proto file
+set(STT_PROTO_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../proto/stt.proto) # stt.proto file
 
 # Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
